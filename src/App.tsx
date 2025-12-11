@@ -6,6 +6,7 @@ import Contact from './pages/Contact';
 import FAQs from './pages/FAQs';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
+import Donate from './pages/Donate';
 import './index.css';
 
 // Scroll to top component
@@ -36,6 +37,7 @@ function App() {
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/donate" element={<Donate />} />
       </Routes>
     </Router>
   );
