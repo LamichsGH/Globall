@@ -102,6 +102,7 @@ const Navigation = () => {
                 <li><Link to="/about" onClick={handleLinkClick}>Mission</Link></li>
                 <li><Link to="/faqs" onClick={handleLinkClick}>FAQ's</Link></li>
                 <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
+                <li><Link to="/donate" onClick={handleLinkClick} className="donate-nav-link">Donate</Link></li>
               </ul>
             </div>
           </div>
