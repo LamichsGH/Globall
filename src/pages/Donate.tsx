@@ -1,50 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-
-const SUGGESTED_AMOUNTS = [10, 25, 50, 100];
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const Donate = () => {
   const [donationType, setDonationType] = useState<'one-time' | 'monthly'>('one-time');
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(25);
-  const [customAmount, setCustomAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
 
-  const handleAmountSelect = (amount: number) => {
-    setSelectedAmount(amount);
-    setCustomAmount('');
-  };
-
-  const handleCustomAmountChange = (value: string) => {
-    setCustomAmount(value);
-    setSelectedAmount(null);
-  };
-
-  const getFinalAmount = () => {
-    if (customAmount) {
-      const parsed = parseFloat(customAmount);
-      return isNaN(parsed) ? 0 : parsed;
+  useEffect(() => {
+    if (searchParams.get('success') === 'true') {
+      toast.success('Thank you for your donation!');
+    } else if (searchParams.get('canceled') === 'true') {
+      toast.info('Donation was canceled.');
     }
-    return selectedAmount || 0;
-  };
+  }, [searchParams]);
 
   const handleDonate = async () => {
-    const amount = getFinalAmount();
-    if (amount < 1) {
-      alert('Please enter a valid amount (minimum £1)');
-      return;
-    }
-
     setIsLoading(true);
     
     try {
-      // For now, redirect to contact page with donation intent
-      // This will be replaced with Stripe checkout once products are created
-      const message = `I would like to make a ${donationType} donation of £${amount}`;
-      window.location.href = `/contact?donation=${encodeURIComponent(message)}`;
+      const { data, error } = await supabase.functions.invoke('create-donation', {
+        body: { donationType },
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
     } catch (error) {
       console.error('Donation error:', error);
-      alert('Something went wrong. Please try again.');
+      toast.error('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -111,42 +99,10 @@ const Donate = () => {
                   )}
                 </div>
 
-                {/* Suggested Amounts */}
-                <div className="amount-grid mb24">
-                  {SUGGESTED_AMOUNTS.map((amount) => (
-                    <button
-                      key={amount}
-                      className={`amount-btn ${selectedAmount === amount ? 'selected' : ''}`}
-                      onClick={() => handleAmountSelect(amount)}
-                    >
-                      £{amount}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Custom Amount */}
-                <div className="custom-amount mb32">
-                  <label className="mb8 block">Or enter a custom amount:</label>
-                  <div className="input-with-prefix">
-                    <span className="prefix">£</span>
-                    <input
-                      type="number"
-                      min="1"
-                      step="1"
-                      placeholder="Enter amount"
-                      value={customAmount}
-                      onChange={(e) => handleCustomAmountChange(e.target.value)}
-                      className="form-control custom-amount-input"
-                    />
-                  </div>
-                </div>
-
-                {/* Donation Summary */}
+                {/* Test Amount Notice */}
                 <div className="donation-summary mb32 p24 bg-secondary border-radius">
-                  <p className="mb0">
-                    <strong>Your {donationType === 'monthly' ? 'monthly' : ''} donation:</strong>{' '}
-                    <span className="text-lg">£{getFinalAmount()}</span>
-                    {donationType === 'monthly' && <span className="text-sm"> /month</span>}
+                  <p className="mb0 text-center">
+                    <strong>Test Mode:</strong> 10p {donationType === 'monthly' ? 'monthly' : 'one-time'} donation
                   </p>
                 </div>
 
@@ -154,9 +110,9 @@ const Donate = () => {
                 <button
                   className="btn btn-lg btn-filled btn-block"
                   onClick={handleDonate}
-                  disabled={isLoading || getFinalAmount() < 1}
+                  disabled={isLoading}
                 >
-                  {isLoading ? 'Processing...' : `Donate £${getFinalAmount()}${donationType === 'monthly' ? '/month' : ''}`}
+                  {isLoading ? 'Processing...' : `Donate 10p${donationType === 'monthly' ? '/month' : ''}`}
                 </button>
 
                 <p className="text-center text-sm mt24 color-muted">
