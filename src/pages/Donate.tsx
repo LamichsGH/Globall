@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,11 +11,13 @@ const Donate = () => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (searchParams.get('success') === 'true') {
-      toast.success('Thank you for your generous donation!');
+      setShowThankYou(true);
     }
     if (searchParams.get('canceled') === 'true') {
       toast.info('Donation was canceled.');
@@ -26,6 +28,11 @@ const Donate = () => {
       window.AOS.init({ duration: 800, once: true, offset: 100 });
     }
   }, [searchParams]);
+
+  const closeThankYou = () => {
+    setShowThankYou(false);
+    navigate('/donate', { replace: true });
+  };
 
   const handleSelectPreset = (amount: number) => {
     setSelectedAmount(amount);
@@ -81,6 +88,25 @@ const Donate = () => {
   return (
     <div className="scroll-assist">
       <Navigation />
+      
+      {/* Thank You Modal */}
+      {showThankYou && (
+        <div className="thank-you-overlay" onClick={closeThankYou}>
+          <div className="thank-you-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="thank-you-icon">✓</div>
+            <h2 className="thank-you-title">Thank You!</h2>
+            <p className="thank-you-message">
+              Your generous donation will help bring joy through football to children around the world.
+            </p>
+            <p className="thank-you-submessage">
+              Together, we're making a difference, one ball at a time.
+            </p>
+            <button className="thank-you-btn" onClick={closeThankYou}>
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
       
       <div className="main-container">
         {/* Hero Section */}
@@ -199,6 +225,115 @@ const Donate = () => {
       </div>
 
       <style>{`
+        /* Thank You Modal */
+        .thank-you-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.8);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+          animation: fadeIn 0.3s ease;
+        }
+        
+        .thank-you-modal {
+          background: linear-gradient(135deg, #47b475 0%, #2d8a55 100%);
+          padding: 48px 40px;
+          border-radius: 20px;
+          text-align: center;
+          max-width: 450px;
+          margin: 20px;
+          animation: slideUp 0.4s ease;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .thank-you-icon {
+          width: 80px;
+          height: 80px;
+          background: #fff;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 40px;
+          color: #47b475;
+          margin: 0 auto 24px;
+          animation: scaleIn 0.5s ease 0.2s both;
+        }
+        
+        .thank-you-title {
+          font-size: 36px;
+          font-weight: 700;
+          color: #fff;
+          margin: 0 0 16px 0;
+          text-transform: uppercase;
+          letter-spacing: 3px;
+        }
+        
+        .thank-you-message {
+          font-size: 18px;
+          color: rgba(255, 255, 255, 0.95);
+          margin: 0 0 12px 0;
+          line-height: 1.6;
+        }
+        
+        .thank-you-submessage {
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.8);
+          margin: 0 0 32px 0;
+          font-style: italic;
+        }
+        
+        .thank-you-btn {
+          background: #fff;
+          color: #47b475;
+          border: none;
+          padding: 14px 48px;
+          font-size: 16px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          border-radius: 50px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        
+        .thank-you-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+          from { 
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes scaleIn {
+          from { 
+            opacity: 0;
+            transform: scale(0.5);
+          }
+          to { 
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
         /* Hero Section */
         .donate-hero-content {
           display: flex;
