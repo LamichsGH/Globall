@@ -77,7 +77,7 @@ const Navigation = () => {
         <div className="nav-bar">
           <div className="module left">
             <Link to="/">
-              <img className="logo logo-dark" alt="Globall" src="/globall.png" />
+              <img className="logo logo-dark" alt="Globall" src="/index.png" />
             </Link>
           </div>
           <div className="module widget-handle mobile-toggle right visible-sm visible-xs">
