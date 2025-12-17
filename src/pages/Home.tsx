@@ -100,9 +100,28 @@ const Home = () => {
             <div className="row">
               <div className="col-sm-12 col-md-10 col-md-offset-1 text-center">
                 <h1 className="large bold uppercase mb40 mb-xs-16" data-aos="fade-up" data-aos-delay="100">Follow Us</h1>
-                <a href="https://www.instagram.com/globalluk/" target="_blank" data-aos="fade-up" data-aos-delay="200" rel="noopener noreferrer">
-                  <img className="image-xs" alt="Instagram" src="/insta.png" />
-                </a>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <a 
+                    href="https://www.instagram.com/globalluk/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    data-aos="fade-up" 
+                    data-aos-delay="200"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '16px' }}
+                  >
+                    <img 
+                      src="/globall-nav-logo.png" 
+                      alt="GLO-BALL" 
+                      style={{ height: '40px', filter: 'brightness(0) invert(1)' }} 
+                    />
+                    <span style={{ fontSize: '28px', color: 'rgba(255,255,255,0.8)', fontWeight: '300' }}>+</span>
+                    <img 
+                      src="/insta.png" 
+                      alt="Instagram" 
+                      style={{ height: '44px', filter: 'brightness(0) invert(1)' }} 
+                    />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
