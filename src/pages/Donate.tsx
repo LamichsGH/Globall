@@ -27,6 +27,22 @@ const Donate = () => {
     if (typeof window !== 'undefined' && window.AOS) {
       window.AOS.init({ duration: 800, once: true, offset: 100 });
     }
+
+    // Initialize background images (converts img to CSS background-image for mobile compatibility)
+    if (typeof window !== 'undefined' && window.jQuery) {
+      window.jQuery(document).ready(() => {
+        window.jQuery('.background-image-holder').each(function() {
+          const imgElement = window.jQuery(this).find('.background-image');
+          if (imgElement.length) {
+            const src = imgElement.attr('src');
+            if (src) {
+              window.jQuery(this).css('background-image', 'url(' + src + ')');
+              window.jQuery(this).addClass('fadeIn');
+            }
+          }
+        });
+      });
+    }
   }, [searchParams]);
 
   const closeThankYou = () => {
@@ -587,6 +603,13 @@ const Donate = () => {
           .section-heading {
             font-size: 24px;
             letter-spacing: 3px;
+          }
+        }
+        
+        /* iOS parallax fix - iOS Safari doesn't support background-attachment: fixed */
+        @supports (-webkit-touch-callout: none) {
+          .parallax > .background-image-holder {
+            background-attachment: scroll !important;
           }
         }
       `}</style>
