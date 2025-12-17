@@ -56,15 +56,20 @@ const Donate = () => {
           <div className="container v-align-transform">
             <div className="row">
               <div className="col-sm-12 text-center" data-aos="fade-up">
-                <h1 className="hero-main-title" data-aos="fade-up" data-aos-delay="100">
-                  SUPPORT <img src="/index.png" alt="GLO-BALL" style={{ height: '0.9em', verticalAlign: 'baseline', display: 'inline' }} />
+                <h1 className="hero-support-text" data-aos="fade-up" data-aos-delay="100">
+                  SUPPORT
                 </h1>
-                <div className="hero-subheading" data-aos="fade-up" data-aos-delay="300">
-                  <span className="one-ball-world">One Ball</span> <span className="hero-separator">|</span> <span className="one-ball-world">One World</span>
+                <div className="hero-logo-container" data-aos="fade-up" data-aos-delay="200">
+                  <img src="/index.png" alt="GLO-BALL" className="hero-logo-main" />
                 </div>
-                <h5 className="hero-tagline" data-aos="fade-up" data-aos-delay="400">
+                <div className="hero-subheading" data-aos="fade-up" data-aos-delay="300">
+                  <span className="one-ball-world">One Ball</span>
+                  <span className="hero-separator">|</span>
+                  <span className="one-ball-world">One World</span>
+                </div>
+                <p className="hero-tagline-text" data-aos="fade-up" data-aos-delay="400">
                   Help us bring joy through football
-                </h5>
+                </p>
               </div>
             </div>
           </div>
@@ -200,20 +205,66 @@ const Donate = () => {
       </div>
 
       <style>{`
-        /* Hero Logo */
-        .hero-logo {
-          max-width: 120px;
-          margin-bottom: 24px;
-          filter: brightness(0) invert(1);
+        /* Hero Section - Stacked Layout */
+        .hero-support-text {
+          font-size: 24px;
+          font-weight: 600;
+          letter-spacing: 12px;
+          color: rgba(255, 255, 255, 0.9);
+          margin-bottom: 20px;
+          text-transform: uppercase;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
         
-        .hero-main-title {
-          font-size: 56px;
-          font-weight: 700;
-          letter-spacing: 8px;
+        .hero-logo-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 28px;
+        }
+        
+        .hero-logo-main {
+          height: 100px;
+          max-width: 320px;
+          object-fit: contain;
+          filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.4));
+          transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        
+        .hero-logo-main:hover {
+          transform: scale(1.05);
+          filter: drop-shadow(0 6px 30px rgba(0, 0, 0, 0.5));
+        }
+        
+        .hero-subheading {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 20px;
+        }
+        
+        .one-ball-world {
+          font-size: 18px;
+          font-weight: 600;
+          letter-spacing: 4px;
           color: #fff;
-          margin-bottom: 16px;
           text-transform: uppercase;
+        }
+        
+        .hero-separator {
+          font-size: 20px;
+          color: rgba(255, 255, 255, 0.5);
+          font-weight: 300;
+        }
+        
+        .hero-tagline-text {
+          font-size: 16px;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 0.8);
+          letter-spacing: 2px;
+          margin: 0;
+          text-transform: none;
         }
         
         /* Section Headings */
@@ -404,9 +455,19 @@ const Donate = () => {
         
         /* Responsive */
         @media (max-width: 991px) {
-          .hero-main-title {
-            font-size: 42px;
-            letter-spacing: 5px;
+          .hero-support-text {
+            font-size: 20px;
+            letter-spacing: 10px;
+          }
+          
+          .hero-logo-main {
+            height: 80px;
+            max-width: 260px;
+          }
+          
+          .one-ball-world {
+            font-size: 16px;
+            letter-spacing: 3px;
           }
           
           .section-heading {
@@ -416,13 +477,38 @@ const Donate = () => {
         }
         
         @media (max-width: 767px) {
-          .hero-logo {
-            max-width: 80px;
+          .hero-support-text {
+            font-size: 16px;
+            letter-spacing: 8px;
+            margin-bottom: 16px;
           }
           
-          .hero-main-title {
-            font-size: 28px;
-            letter-spacing: 3px;
+          .hero-logo-main {
+            height: 60px;
+            max-width: 200px;
+          }
+          
+          .hero-logo-container {
+            margin-bottom: 20px;
+          }
+          
+          .hero-subheading {
+            gap: 10px;
+            margin-bottom: 16px;
+          }
+          
+          .one-ball-world {
+            font-size: 14px;
+            letter-spacing: 2px;
+          }
+          
+          .hero-separator {
+            font-size: 16px;
+          }
+          
+          .hero-tagline-text {
+            font-size: 14px;
+            letter-spacing: 1px;
           }
           
           .section-heading {
