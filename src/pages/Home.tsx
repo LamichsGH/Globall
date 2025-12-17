@@ -100,15 +100,15 @@ const Home = () => {
             <div className="row">
               <div className="col-sm-12 col-md-10 col-md-offset-1 text-center">
                 <h1 className="large bold uppercase mb40 mb-xs-16" data-aos="fade-up" data-aos-delay="100">Follow Us</h1>
-                <a 
-                  href="https://www.instagram.com/globalluk/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  data-aos="fade-up" 
-                  data-aos-delay="200"
-                >
-                  <img src="/insta.png" alt="Follow GLO-BALL on Instagram" style={{ height: '44px', filter: 'brightness(0) invert(1)' }} />
-                </a>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} data-aos="fade-up" data-aos-delay="200">
+                  <a 
+                    href="https://www.instagram.com/globalluk/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <img src="/insta.png" alt="Follow GLO-BALL on Instagram" style={{ height: '44px', filter: 'brightness(0) invert(1)' }} />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
