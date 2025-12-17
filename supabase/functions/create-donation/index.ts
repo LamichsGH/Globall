@@ -31,6 +31,8 @@ serve(async (req) => {
     const priceId = donationType === "monthly" ? PRICES.monthly : PRICES["one-time"];
     const mode = donationType === "monthly" ? "subscription" : "payment";
 
+    const origin = req.headers.get("origin") || "https://a2a6fc1c-fbe4-4bb3-baed-689501ca927c.lovableproject.com";
+
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
@@ -39,8 +41,8 @@ serve(async (req) => {
         },
       ],
       mode: mode,
-      success_url: `${req.headers.get("origin")}/donate?success=true`,
-      cancel_url: `${req.headers.get("origin")}/donate?canceled=true`,
+      success_url: `${origin}/donate?success=true`,
+      cancel_url: `${origin}/donate?canceled=true`,
     });
 
     console.log("Checkout session created:", session.id);
