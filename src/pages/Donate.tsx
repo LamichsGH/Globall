@@ -49,14 +49,14 @@ const Donate = () => {
   const getFinalAmount = (): number | null => {
     if (selectedAmount) return selectedAmount;
     const custom = parseFloat(customAmount);
-    if (!isNaN(custom) && custom >= 1) return custom;
+    if (!isNaN(custom) && custom >= 0.30) return custom;
     return null;
   };
 
   const handleDonate = async () => {
     const amount = getFinalAmount();
     if (!amount) {
-      toast.error('Please select or enter a donation amount (minimum £1)');
+      toast.error('Please select or enter a donation amount (minimum 30p)');
       return;
     }
 
@@ -161,7 +161,7 @@ const Donate = () => {
                     <input
                       type="text"
                       inputMode="decimal"
-                      placeholder="Custom amount"
+                      placeholder="e.g. 0.30 for 30p"
                       value={customAmount}
                       onChange={(e) => handleCustomAmountChange(e.target.value)}
                       className="custom-amount-input"

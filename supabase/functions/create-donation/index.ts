@@ -15,11 +15,11 @@ serve(async (req) => {
   try {
     const { amount } = await req.json();
     
-    // Validate amount (minimum £1, maximum £10000)
+    // Validate amount (minimum 30p, maximum £10000)
     const donationAmount = Number(amount);
-    if (!donationAmount || donationAmount < 1 || donationAmount > 10000) {
+    if (!donationAmount || donationAmount < 0.30 || donationAmount > 10000) {
       return new Response(
-        JSON.stringify({ error: "Please enter a valid amount between £1 and £10,000" }),
+        JSON.stringify({ error: "Please enter a valid amount between 30p and £10,000" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
