@@ -56,14 +56,7 @@ const Donate = () => {
           <div className="container v-align-transform">
             <div className="row">
               <div className="col-sm-12 text-center" data-aos="fade-up">
-                <img 
-                  alt="GLO-BALL" 
-                  src="/globall-logo.png" 
-                  className="hero-logo"
-                  data-aos="fade-up" 
-                  data-aos-delay="100"
-                />
-                <h1 className="hero-main-title" data-aos="fade-up" data-aos-delay="200">
+                <h1 className="hero-main-title" data-aos="fade-up" data-aos-delay="100">
                   SUPPORT GLO-BALL
                 </h1>
                 <div className="hero-subheading" data-aos="fade-up" data-aos-delay="300">
@@ -145,13 +138,6 @@ const Donate = () => {
           <div className="container">
             <div className="row">
               <div className="col-sm-12 text-center">
-                <img 
-                  alt="GLO-BALL" 
-                  src="/globall-logo.png" 
-                  className="section-logo"
-                  data-aos="fade-up" 
-                  data-aos-delay="50"
-                />
                 <h2 className="section-heading" data-aos="fade-up" data-aos-delay="100">
                   YOUR IMPACT
                 </h2>
