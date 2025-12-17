@@ -165,20 +165,15 @@ const Donate = () => {
                 <h2 className="section-heading mb48" data-aos="fade-up" data-aos-delay="100">
                   FOLLOW US
                 </h2>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <a 
-                    href="https://www.instagram.com/globalluk/" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="follow-link"
-                    data-aos="fade-up" 
-                    data-aos-delay="200"
-                  >
-                    <img src="/index.png" alt="GLO-BALL" className="follow-logo" />
-                    <span className="follow-plus">+</span>
-                    <img src="/insta.png" alt="Instagram" className="follow-insta" />
-                  </a>
-                </div>
+                <a 
+                  href="https://www.instagram.com/globalluk/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  data-aos="fade-up" 
+                  data-aos-delay="200"
+                >
+                  <img src="/insta.png" alt="Follow GLO-BALL on Instagram" style={{ height: '44px', filter: 'brightness(0) invert(1)' }} />
+                </a>
               </div>
             </div>
           </div>
