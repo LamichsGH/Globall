@@ -57,7 +57,7 @@ const Donate = () => {
             <div className="row">
               <div className="col-sm-12 text-center" data-aos="fade-up">
                 <h1 className="hero-main-title" data-aos="fade-up" data-aos-delay="100">
-                  SUPPORT GLO-BALL
+                  SUPPORT <img src="/index.png" alt="GLO-BALL" style={{ height: '0.9em', verticalAlign: 'baseline', display: 'inline' }} />
                 </h1>
                 <div className="hero-subheading" data-aos="fade-up" data-aos-delay="300">
                   <span className="one-ball-world">One Ball</span> <span className="hero-separator">|</span> <span className="one-ball-world">One World</span>
