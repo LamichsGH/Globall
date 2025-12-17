@@ -83,9 +83,9 @@ const Home = () => {
               <div className="col-sm-12 col-md-10 col-md-offset-1 text-center">
                 <h1 className="large bold uppercase mb40 mb-xs-16" data-aos="fade-up" data-aos-delay="100">DONATE</h1>
                 <p className="lead mb48 mb-xs-32" data-aos="fade-up" data-aos-delay="200">
-                  To find out how to donate to GLO-BALL, contact us today
+                  Support our mission to bring joy through football to children around the world
                 </p>
-                <a className="btn-lg btn" href="/contact" data-aos="fade-up" data-aos-delay="300">Contact Us</a>
+                <a className="btn-lg btn" href="/donate" data-aos="fade-up" data-aos-delay="300">Donate Now</a>
               </div>
             </div>
           </div>

@@ -84,7 +84,7 @@ const Donate = () => {
             <div className="row">
               <div className="col-sm-12 text-center" data-aos="fade-up">
                 <h1 className="hero-support-text" data-aos="fade-up" data-aos-delay="100">
-                  SUPPORT
+                  DONATE
                 </h1>
                 <div className="hero-logo-container" data-aos="fade-up" data-aos-delay="200">
                   <img src="/index.png" alt="GLO-BALL" className="hero-logo-main" />
@@ -344,6 +344,9 @@ const Donate = () => {
         
         /* Donate Button */
         .donate-btn {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
           background: linear-gradient(135deg, #47b475 0%, #2d8a55 50%, #47b475 100%) !important;
           background-size: 200% 200% !important;
           color: #fff !important;
@@ -359,6 +362,8 @@ const Donate = () => {
           animation: btn-glow 2s ease-in-out infinite, gradient-shift 3s ease infinite;
           position: relative;
           overflow: hidden;
+          text-align: center !important;
+          line-height: 1 !important;
         }
         
         .donate-btn::before {
