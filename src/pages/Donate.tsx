@@ -154,42 +154,6 @@ const Donate = () => {
           </div>
         </section>
 
-        {/* Impact Section */}
-        <section className="image-bg parallax pt180 pb180 pt-xs-80 pb-xs-80" data-aos="fade-up">
-          <div className="background-image-holder">
-            <img alt="Impact" className="background-image" src="/globall2.jpg" />
-          </div>
-          <div className="container">
-            <div className="row">
-              <div className="col-sm-12 text-center">
-                <h2 className="section-heading" data-aos="fade-up" data-aos-delay="100">
-                  YOUR IMPACT
-                </h2>
-              </div>
-            </div>
-            <div className="row mt64">
-              <div className="col-sm-4 text-center mb-xs-32" data-aos="fade-up" data-aos-delay="200">
-                <div className="impact-card">
-                  <span className="impact-amount">£10</span>
-                  <p className="impact-desc">Provides a football to a community</p>
-                </div>
-              </div>
-              <div className="col-sm-4 text-center mb-xs-32" data-aos="fade-up" data-aos-delay="300">
-                <div className="impact-card">
-                  <span className="impact-amount">£25</span>
-                  <p className="impact-desc">Equips a team with basic gear</p>
-                </div>
-              </div>
-              <div className="col-sm-4 text-center" data-aos="fade-up" data-aos-delay="400">
-                <div className="impact-card">
-                  <span className="impact-amount">£100</span>
-                  <p className="impact-desc">Sponsors a community football program</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Follow Us Section */}
         <section className="image-bg parallax pt180 pb180 pt-xs-80 pb-xs-80" data-aos="fade-up">
           <div className="background-image-holder">
