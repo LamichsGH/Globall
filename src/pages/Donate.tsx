@@ -76,27 +76,20 @@ const Donate = () => {
       
       <div className="main-container">
         {/* Hero Section */}
-        <section className="fullscreen image-bg">
+        <section className="fullscreen image-bg" data-aos="fade-up">
           <div className="background-image-holder">
-            <img alt="Support GLO-BALL" className="background-image" src="/globall1.jpg" />
+            <img alt="Donate to GLO-BALL" className="background-image" src="/globall1.jpg" />
           </div>
           <div className="container v-align-transform">
             <div className="row">
               <div className="col-sm-12 text-center" data-aos="fade-up">
-                <h1 className="hero-support-text" data-aos="fade-up" data-aos-delay="100">
-                  DONATE
-                </h1>
-                <div className="hero-logo-container" data-aos="fade-up" data-aos-delay="200">
-                  <img src="/index.png" alt="GLO-BALL" className="hero-logo-main" />
+                <div className="donate-hero-content" data-aos="fade-up" data-aos-delay="200">
+                  <h1 className="donate-hero-title">Donate</h1>
+                  <img alt="GLO-BALL" src="/index.png" className="donate-hero-logo" />
                 </div>
-                <div className="hero-subheading" data-aos="fade-up" data-aos-delay="300">
-                  <span className="one-ball-world">One Ball</span>
-                  <span className="hero-separator">|</span>
-                  <span className="one-ball-world">One World</span>
-                </div>
-                <p className="hero-tagline-text" data-aos="fade-up" data-aos-delay="400">
-                  Help us bring joy through football
-                </p>
+                <h5 className="mb20 mb-xs-16 large" data-aos="fade-up" data-aos-delay="300">
+                  Help us bring joy through football to children around the world
+                </h5>
               </div>
             </div>
           </div>
@@ -231,66 +224,40 @@ const Donate = () => {
       </div>
 
       <style>{`
-        /* Hero Section - Stacked Layout */
-        .hero-support-text {
-          font-size: 72px;
-          font-weight: 800;
-          letter-spacing: 20px;
+        /* Hero Section - Matching Contact/FAQs Style */
+        .donate-hero-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-bottom: 24px;
+        }
+        
+        .donate-hero-title {
+          font-size: 120px;
+          font-weight: 700;
           color: #fff;
-          margin-bottom: 28px;
           text-transform: uppercase;
-          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+          letter-spacing: 8px;
+          margin: 0 0 20px 0;
+          line-height: 1;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        .hero-logo-container {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-bottom: 28px;
-        }
-        
-        .hero-logo-main {
-          height: 100px;
-          max-width: 320px;
-          object-fit: contain;
-          filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.4));
-          transition: transform 0.3s ease, filter 0.3s ease;
-        }
-        
-        .hero-logo-main:hover {
-          transform: scale(1.05);
-          filter: drop-shadow(0 6px 30px rgba(0, 0, 0, 0.5));
-        }
-        
-        .hero-subheading {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 16px;
+        .donate-hero-logo {
+          max-width: 280px;
+          height: auto;
           margin-bottom: 20px;
         }
         
-        .one-ball-world {
-          font-size: 18px;
-          font-weight: 600;
-          letter-spacing: 4px;
-          color: #fff;
-          text-transform: uppercase;
-        }
-        
-        .hero-separator {
-          font-size: 20px;
-          color: rgba(255, 255, 255, 0.5);
-          font-weight: 300;
-        }
-        
-        .hero-tagline-text {
-          font-size: 16px;
-          font-weight: 400;
-          color: rgba(255, 255, 255, 0.8);
-          letter-spacing: 2px;
-          margin: 0;
-          text-transform: none;
+        @media (max-width: 768px) {
+          .donate-hero-title {
+            font-size: 60px;
+            letter-spacing: 4px;
+          }
+          
+          .donate-hero-logo {
+            max-width: 200px;
+          }
         }
         
         /* Section Headings */
