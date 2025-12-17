@@ -6,10 +6,10 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Test prices - 10p each
+// Test prices - 30p each (Stripe minimum)
 const PRICES = {
-  "one-time": "price_1Sd7nFBsVocdQ65XMFDctCWR",
-  "monthly": "price_1Sd7nUBsVocdQ65XQyIUfVaj",
+  "one-time": "price_1Sf8pDBsVocdQ65XceOCi6qT",
+  "monthly": "price_1Sf8pYBsVocdQ65X0vv2zA5E",
 };
 
 serve(async (req) => {

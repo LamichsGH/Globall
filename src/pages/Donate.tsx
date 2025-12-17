@@ -102,7 +102,7 @@ const Donate = () => {
                 {/* Test Amount Notice */}
                 <div className="donation-summary mb32 p24 bg-secondary border-radius">
                   <p className="mb0 text-center">
-                    <strong>Test Mode:</strong> 10p {donationType === 'monthly' ? 'monthly' : 'one-time'} donation
+                    <strong>Test Mode:</strong> 30p {donationType === 'monthly' ? 'monthly' : 'one-time'} donation
                   </p>
                 </div>
 
@@ -112,7 +112,7 @@ const Donate = () => {
                   onClick={handleDonate}
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Processing...' : `Donate 10p${donationType === 'monthly' ? '/month' : ''}`}
+                  {isLoading ? 'Processing...' : `Donate 30p${donationType === 'monthly' ? '/month' : ''}`}
                 </button>
 
                 <p className="text-center text-sm mt24 color-muted">
