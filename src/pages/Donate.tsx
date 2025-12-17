@@ -390,6 +390,14 @@ const Donate = () => {
         
         .payment-element-container {
           margin-bottom: 24px;
+          min-height: 200px;
+        }
+        
+        .loading-text {
+          text-align: center;
+          color: #666;
+          font-size: 14px;
+          margin-bottom: 16px;
         }
         
         .donation-form .donate-btn {

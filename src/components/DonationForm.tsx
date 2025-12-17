@@ -14,11 +14,12 @@ const DonationForm = ({ onSuccess, onError }: DonationFormProps) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !isReady) {
       return;
     }
 
@@ -44,11 +45,19 @@ const DonationForm = ({ onSuccess, onError }: DonationFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="donation-form">
       <div className="payment-element-container">
-        <PaymentElement />
+        <PaymentElement 
+          onReady={() => setIsReady(true)}
+          options={{
+            layout: 'tabs',
+          }}
+        />
       </div>
+      {!isReady && (
+        <div className="loading-text">Loading payment form...</div>
+      )}
       <button
         type="submit"
-        disabled={!stripe || isProcessing}
+        disabled={!stripe || !isReady || isProcessing}
         className="btn btn-lg donate-btn"
       >
         {isProcessing ? 'Processing...' : 'Donate 30p'}
