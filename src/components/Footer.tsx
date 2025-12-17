@@ -6,14 +6,13 @@ const Footer = () => {
       <div className="container">
         <div className="row">
           <div className="col-sm-12 text-center" style={{ marginBottom: '16px' }}>
-            <Link to="/" style={{ display: 'inline-block' }}>
+            <Link to="/" style={{ display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
               <img 
                 alt="GLO-BALL" 
-                src="/globall-logo.png" 
+                src="/globall-nav-logo.png" 
                 style={{ 
-                  height: '50px', 
-                  filter: 'brightness(0) invert(1)',
-                  margin: '0 auto'
+                  height: '40px',
+                  filter: 'brightness(0) invert(1)'
                 }} 
               />
             </Link>
