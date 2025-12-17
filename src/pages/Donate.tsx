@@ -1,20 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
+import DonationForm from '../components/DonationForm';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+// Stripe publishable key (test mode)
+const stripePromise = loadStripe('pk_live_51Sd5sMBsVocdQ65XgAy6Rp47xeTEiNdXs8oc75l4lqWxN71IWzTuhvrcm5PkAPQlvTwvCpDiQMjDQwkMC2PqMJW6005CqmLWHa');
+
 const Donate = () => {
-  const [donationType, setDonationType] = useState<'one-time' | 'monthly'>('one-time');
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    if (searchParams.get('success') === 'true') {
+    if (searchParams.get('payment_intent')) {
       toast.success('Thank you for your donation!');
-    } else if (searchParams.get('canceled') === 'true') {
-      toast.info('Donation was canceled.');
     }
 
     // Initialize AOS
@@ -23,25 +28,47 @@ const Donate = () => {
     }
   }, [searchParams]);
 
-  const handleDonate = async () => {
+  const handleStartDonation = async () => {
     setIsLoading(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('create-donation', {
-        body: { donationType },
-      });
+      const { data, error } = await supabase.functions.invoke('create-payment-intent');
 
       if (error) throw error;
-      if (data?.url) {
-        window.open(data.url, '_blank');
+      if (data?.clientSecret) {
+        setClientSecret(data.clientSecret);
+        setShowForm(true);
       }
     } catch (error) {
-      console.error('Donation error:', error);
+      console.error('Payment intent error:', error);
       toast.error('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleSuccess = () => {
+    toast.success('Thank you for your donation!');
+    setShowForm(false);
+    setClientSecret(null);
+  };
+
+  const handleError = (message: string) => {
+    toast.error(message);
+  };
+
+  const stripeOptions = clientSecret ? {
+    clientSecret,
+    appearance: {
+      theme: 'stripe' as const,
+      variables: {
+        colorPrimary: '#47b475',
+        colorBackground: '#ffffff',
+        colorText: '#333333',
+        borderRadius: '8px',
+      },
+    },
+  } : undefined;
 
   return (
     <div className="scroll-assist">
@@ -87,48 +114,47 @@ const Donate = () => {
                   Your donation helps us provide footballs and equipment to children in underserved communities around the world.
                 </p>
 
-                {/* Donation Type Toggle */}
-                <div className="donation-toggle mb40" data-aos="fade-up" data-aos-delay="300">
-                  <button
-                    className={`donate-type-btn ${donationType === 'one-time' ? 'active' : ''}`}
-                    onClick={() => setDonationType('one-time')}
-                  >
-                    One-Time
-                  </button>
-                  <button
-                    className={`donate-type-btn ${donationType === 'monthly' ? 'active' : ''}`}
-                    onClick={() => setDonationType('monthly')}
-                  >
-                    Monthly
-                  </button>
-                </div>
+                {!showForm ? (
+                  <>
+                    {/* Donation Amount Display */}
+                    <div className="donation-amount-display mb40" data-aos="fade-up" data-aos-delay="300">
+                      <span className="amount-label">Test Mode</span>
+                      <span className="amount-value">30p</span>
+                      <span className="amount-type">one-time donation</span>
+                    </div>
 
-                {donationType === 'monthly' && (
-                  <p className="monthly-note mb24" data-aos="fade-in">
-                    ★ Monthly donors help us plan for the future
-                  </p>
+                    {/* Start Donation Button */}
+                    <button
+                      className="btn btn-lg donate-btn"
+                      onClick={handleStartDonation}
+                      disabled={isLoading}
+                      data-aos="fade-up"
+                      data-aos-delay="400"
+                    >
+                      {isLoading ? 'Loading...' : 'Donate Now'}
+                    </button>
+                  </>
+                ) : (
+                  <div className="payment-form-wrapper" data-aos="fade-up">
+                    {clientSecret && stripeOptions && (
+                      <Elements stripe={stripePromise} options={stripeOptions}>
+                        <DonationForm onSuccess={handleSuccess} onError={handleError} />
+                      </Elements>
+                    )}
+                    <button
+                      className="btn-cancel mt24"
+                      onClick={() => {
+                        setShowForm(false);
+                        setClientSecret(null);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 )}
 
-                {/* Test Amount Display */}
-                <div className="donation-amount-display mb40" data-aos="fade-up" data-aos-delay="400">
-                  <span className="amount-label">Test Mode</span>
-                  <span className="amount-value">30p</span>
-                  <span className="amount-type">{donationType === 'monthly' ? 'per month' : 'one-time'}</span>
-                </div>
-
-                {/* Donate Button */}
-                <button
-                  className="btn btn-lg donate-btn"
-                  onClick={handleDonate}
-                  disabled={isLoading}
-                  data-aos="fade-up"
-                  data-aos-delay="500"
-                >
-                  {isLoading ? 'Processing...' : `Donate 30p${donationType === 'monthly' ? '/month' : ''}`}
-                </button>
-
-                <p className="secure-note mt32" data-aos="fade-up" data-aos-delay="600">
-                  Secure payment powered by Stripe. Cancel monthly donations anytime.
+                <p className="secure-note mt32" data-aos="fade-up" data-aos-delay="500">
+                  Secure payment powered by Stripe.
                 </p>
               </div>
             </div>
@@ -284,44 +310,6 @@ const Donate = () => {
           opacity: 0.9;
         }
         
-        /* Donation Toggle */
-        .donation-toggle {
-          display: inline-flex;
-          background: rgba(255, 255, 255, 0.15);
-          border-radius: 50px;
-          padding: 6px;
-          gap: 0;
-        }
-        
-        .donate-type-btn {
-          padding: 16px 40px;
-          border: none;
-          background: transparent;
-          color: rgba(255, 255, 255, 0.8);
-          font-size: 13px;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          cursor: pointer;
-          border-radius: 50px;
-          transition: all 0.3s ease;
-        }
-        
-        .donate-type-btn:hover {
-          color: #fff;
-        }
-        
-        .donate-type-btn.active {
-          background: #fff;
-          color: #47b475;
-        }
-        
-        .monthly-note {
-          color: rgba(255, 255, 255, 0.9);
-          font-size: 15px;
-          font-style: italic;
-        }
-        
         /* Donation Amount Display */
         .donation-amount-display {
           display: flex;
@@ -385,6 +373,46 @@ const Donate = () => {
         .secure-note {
           font-size: 13px;
           color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Payment Form */
+        .payment-form-wrapper {
+          max-width: 400px;
+          margin: 0 auto;
+        }
+        
+        .donation-form {
+          background: #fff;
+          padding: 32px;
+          border-radius: 12px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .payment-element-container {
+          margin-bottom: 24px;
+        }
+        
+        .donation-form .donate-btn {
+          width: 100%;
+          margin-top: 8px;
+        }
+        
+        .btn-cancel {
+          background: transparent;
+          border: none;
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 14px;
+          cursor: pointer;
+          text-decoration: underline;
+          padding: 8px 16px;
+        }
+        
+        .btn-cancel:hover {
+          color: #fff;
+        }
+        
+        .mt24 {
+          margin-top: 24px;
         }
         
         /* Impact Cards */
@@ -498,58 +526,33 @@ const Donate = () => {
           }
           
           .one-ball-world {
-            font-size: 14px;
+            font-size: 13px;
             letter-spacing: 2px;
-          }
-          
-          .hero-separator {
-            font-size: 16px;
           }
           
           .hero-tagline-text {
             font-size: 14px;
-            letter-spacing: 1px;
           }
           
           .section-heading {
-            font-size: 24px;
+            font-size: 26px;
             letter-spacing: 3px;
           }
           
-          .donate-type-btn {
-            padding: 12px 28px;
-            font-size: 12px;
-            letter-spacing: 1px;
-          }
-          
           .amount-value {
-            font-size: 60px;
-          }
-          
-          .donate-btn {
-            padding: 16px 40px !important;
-            font-size: 13px !important;
-            letter-spacing: 2px !important;
+            font-size: 56px;
           }
           
           .impact-amount {
             font-size: 40px;
           }
           
-          .impact-card {
-            padding: 32px 20px;
+          .donation-form {
+            padding: 24px;
           }
           
-          .mt64 {
-            margin-top: 40px;
-          }
-          
-          .follow-logo {
-            height: 32px;
-          }
-          
-          .follow-insta {
-            height: 36px;
+          .payment-form-wrapper {
+            padding: 0 16px;
           }
         }
       `}</style>
