@@ -344,30 +344,64 @@ const Donate = () => {
         
         /* Donate Button */
         .donate-btn {
-          background: #fff !important;
-          color: #47b475 !important;
+          background: linear-gradient(135deg, #47b475 0%, #2d8a55 50%, #47b475 100%) !important;
+          background-size: 200% 200% !important;
+          color: #fff !important;
           border: none !important;
-          padding: 20px 56px !important;
-          font-size: 15px !important;
+          padding: 22px 64px !important;
+          font-size: 16px !important;
           font-weight: 700 !important;
           text-transform: uppercase !important;
-          letter-spacing: 3px !important;
+          letter-spacing: 4px !important;
           border-radius: 50px !important;
-          transition: all 0.3s ease !important;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+          transition: all 0.4s ease !important;
+          box-shadow: 0 8px 30px rgba(71, 180, 117, 0.4), 0 0 0 0 rgba(71, 180, 117, 0.4);
+          animation: btn-glow 2s ease-in-out infinite, gradient-shift 3s ease infinite;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .donate-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          transition: left 0.5s ease;
+        }
+        
+        .donate-btn:hover::before {
+          left: 100%;
         }
         
         .donate-btn:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
-          background: #fff !important;
-          color: #3a9660 !important;
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: 0 12px 40px rgba(71, 180, 117, 0.5), 0 0 20px rgba(71, 180, 117, 0.3);
+          background-position: right center !important;
         }
         
         .donate-btn:disabled {
           opacity: 0.7;
           cursor: not-allowed;
           transform: none;
+          animation: none;
+        }
+        
+        @keyframes btn-glow {
+          0%, 100% {
+            box-shadow: 0 8px 30px rgba(71, 180, 117, 0.4), 0 0 0 0 rgba(71, 180, 117, 0.4);
+          }
+          50% {
+            box-shadow: 0 8px 30px rgba(71, 180, 117, 0.5), 0 0 20px rgba(71, 180, 117, 0.2);
+          }
+        }
+        
+        @keyframes gradient-shift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
         
         .secure-note {
