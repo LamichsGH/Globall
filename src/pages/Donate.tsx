@@ -8,8 +8,8 @@ import DonationForm from '../components/DonationForm';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-// Stripe publishable key (test mode)
-const stripePromise = loadStripe('pk_live_51Sd5sMBsVocdQ65XgAy6Rp47xeTEiNdXs8oc75l4lqWxN71IWzTuhvrcm5PkAPQlvTwvCpDiQMjDQwkMC2PqMJW6005CqmLWHa');
+// Stripe publishable key - uses environment variable for easier key rotation
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
 
 const Donate = () => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
