@@ -186,7 +186,7 @@ const Donate = () => {
                     data-aos="fade-up" 
                     data-aos-delay="200"
                   >
-                    <img src="/globall-nav-logo.png" alt="GLO-BALL" className="follow-logo" />
+                    <img src="/index.png" alt="GLO-BALL" className="follow-logo" />
                     <span className="follow-plus">+</span>
                     <img src="/insta.png" alt="Instagram" className="follow-insta" />
                   </a>
@@ -389,7 +389,6 @@ const Donate = () => {
         
         .follow-logo {
           height: 40px;
-          filter: brightness(0) invert(1);
         }
         
         .follow-plus {
