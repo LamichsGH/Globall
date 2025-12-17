@@ -40,7 +40,9 @@ const Donate = () => {
         setShowForm(true);
       }
     } catch (error) {
-      console.error('Payment intent error:', error);
+      if (import.meta.env.DEV) {
+        console.error('Payment intent error:', error);
+      }
       toast.error('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
