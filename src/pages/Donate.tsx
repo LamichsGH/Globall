@@ -207,13 +207,13 @@ const Donate = () => {
       <style>{`
         /* Hero Section - Stacked Layout */
         .hero-support-text {
-          font-size: 42px;
-          font-weight: 700;
-          letter-spacing: 16px;
+          font-size: 72px;
+          font-weight: 800;
+          letter-spacing: 20px;
           color: #fff;
-          margin-bottom: 24px;
+          margin-bottom: 28px;
           text-transform: uppercase;
-          text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
         
         .hero-logo-container {
