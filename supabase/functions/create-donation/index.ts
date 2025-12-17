@@ -6,12 +6,6 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Test prices - 30p each (Stripe minimum)
-const PRICES = {
-  "one-time": "price_1Sf8pDBsVocdQ65XceOCi6qT",
-  "monthly": "price_1Sf8pYBsVocdQ65X0vv2zA5E",
-};
-
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -19,28 +13,41 @@ serve(async (req) => {
   }
 
   try {
-    const { donationType } = await req.json();
+    const { amount } = await req.json();
     
-    console.log("Creating donation checkout:", { donationType });
+    // Validate amount (minimum £1, maximum £10000)
+    const donationAmount = Number(amount);
+    if (!donationAmount || donationAmount < 1 || donationAmount > 10000) {
+      return new Response(
+        JSON.stringify({ error: "Please enter a valid amount between £1 and £10,000" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+      );
+    }
+
+    console.log("Creating donation checkout for amount:", donationAmount);
 
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
 
-    const priceId = donationType === "monthly" ? PRICES.monthly : PRICES["one-time"];
-    const mode = donationType === "monthly" ? "subscription" : "payment";
-
     const origin = req.headers.get("origin") || "https://a2a6fc1c-fbe4-4bb3-baed-689501ca927c.lovableproject.com";
 
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
-          price: priceId,
+          price_data: {
+            currency: "gbp",
+            product_data: {
+              name: "GLO-BALL Donation",
+              description: "Support children through football",
+            },
+            unit_amount: Math.round(donationAmount * 100), // Convert £ to pence
+          },
           quantity: 1,
         },
       ],
-      mode: mode,
+      mode: "payment",
       success_url: `${origin}/donate?success=true`,
       cancel_url: `${origin}/donate?canceled=true`,
     });
@@ -53,9 +60,7 @@ serve(async (req) => {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    // Log detailed error server-side only
     console.error("Error creating donation checkout:", errorMessage);
-    // Return generic error to client
     return new Response(JSON.stringify({ error: "Failed to process donation. Please try again." }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,

@@ -1,25 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import DonationForm from '../components/DonationForm';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-// Stripe publishable key - uses environment variable for easier key rotation
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
+const PRESET_AMOUNTS = [5, 10, 20];
 
 const Donate = () => {
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [customAmount, setCustomAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showForm, setShowForm] = useState(false);
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    if (searchParams.get('payment_intent')) {
-      toast.success('Thank you for your donation!');
+    if (searchParams.get('success') === 'true') {
+      toast.success('Thank you for your generous donation!');
+    }
+    if (searchParams.get('canceled') === 'true') {
+      toast.info('Donation was canceled.');
     }
 
     // Initialize AOS
@@ -28,49 +27,56 @@ const Donate = () => {
     }
   }, [searchParams]);
 
-  const handleStartDonation = async () => {
+  const handleSelectPreset = (amount: number) => {
+    setSelectedAmount(amount);
+    setCustomAmount('');
+  };
+
+  const handleCustomAmountChange = (value: string) => {
+    // Only allow numbers and single decimal point
+    const sanitized = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+    setCustomAmount(sanitized);
+    setSelectedAmount(null);
+  };
+
+  const getFinalAmount = (): number | null => {
+    if (selectedAmount) return selectedAmount;
+    const custom = parseFloat(customAmount);
+    if (!isNaN(custom) && custom >= 1) return custom;
+    return null;
+  };
+
+  const handleDonate = async () => {
+    const amount = getFinalAmount();
+    if (!amount) {
+      toast.error('Please select or enter a donation amount (minimum £1)');
+      return;
+    }
+
     setIsLoading(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('create-payment-intent');
+      const { data, error } = await supabase.functions.invoke('create-donation', {
+        body: { amount }
+      });
 
       if (error) throw error;
-      if (data?.clientSecret) {
-        setClientSecret(data.clientSecret);
-        setShowForm(true);
+      
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL returned');
       }
     } catch (error) {
       if (import.meta.env.DEV) {
-        console.error('Payment intent error:', error);
+        console.error('Donation error:', error);
       }
       toast.error('Something went wrong. Please try again.');
-    } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSuccess = () => {
-    toast.success('Thank you for your donation!');
-    setShowForm(false);
-    setClientSecret(null);
-  };
-
-  const handleError = (message: string) => {
-    toast.error(message);
-  };
-
-  const stripeOptions = clientSecret ? {
-    clientSecret,
-    appearance: {
-      theme: 'stripe' as const,
-      variables: {
-        colorPrimary: '#47b475',
-        colorBackground: '#ffffff',
-        colorText: '#333333',
-        borderRadius: '8px',
-      },
-    },
-  } : undefined;
+  const finalAmount = getFinalAmount();
 
   return (
     <div className="scroll-assist">
@@ -109,44 +115,52 @@ const Donate = () => {
                   Your donation helps us provide footballs and equipment to children in underserved communities around the world.
                 </p>
 
-                {!showForm ? (
-                  <>
-                    {/* Donation Amount Display */}
-                    <div className="donation-amount-display mb40" data-aos="fade-up" data-aos-delay="300">
-                      <span className="amount-label">Test Mode</span>
-                      <span className="amount-value">30p</span>
-                      <span className="amount-type">one-time donation</span>
-                    </div>
+                {/* Amount Selection */}
+                <div className="amount-selection" data-aos="fade-up" data-aos-delay="300">
+                  <div className="preset-amounts">
+                    {PRESET_AMOUNTS.map((amount) => (
+                      <button
+                        key={amount}
+                        className={`amount-btn ${selectedAmount === amount ? 'selected' : ''}`}
+                        onClick={() => handleSelectPreset(amount)}
+                        disabled={isLoading}
+                      >
+                        £{amount}
+                      </button>
+                    ))}
+                  </div>
 
-                    {/* Start Donation Button */}
-                    <button
-                      className="btn btn-lg donate-btn"
-                      onClick={handleStartDonation}
+                  <div className="custom-amount-wrapper">
+                    <span className="currency-symbol">£</span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      placeholder="Custom amount"
+                      value={customAmount}
+                      onChange={(e) => handleCustomAmountChange(e.target.value)}
+                      className="custom-amount-input"
                       disabled={isLoading}
-                      data-aos="fade-up"
-                      data-aos-delay="400"
-                    >
-                      {isLoading ? 'Loading...' : 'Donate Now'}
-                    </button>
-                  </>
-                ) : (
-                  <div className="payment-form-wrapper" data-aos="fade-up">
-                    {clientSecret && stripeOptions && (
-                      <Elements stripe={stripePromise} options={stripeOptions}>
-                        <DonationForm onSuccess={handleSuccess} onError={handleError} />
-                      </Elements>
-                    )}
-                    <button
-                      className="btn-cancel mt24"
-                      onClick={() => {
-                        setShowForm(false);
-                        setClientSecret(null);
-                      }}
-                    >
-                      Cancel
-                    </button>
+                    />
+                  </div>
+                </div>
+
+                {/* Selected Amount Display */}
+                {finalAmount && (
+                  <div className="selected-amount-display" data-aos="fade-up">
+                    <span className="amount-value">£{finalAmount.toFixed(2)}</span>
                   </div>
                 )}
+
+                {/* Donate Button */}
+                <button
+                  className="btn btn-lg donate-btn"
+                  onClick={handleDonate}
+                  disabled={isLoading || !finalAmount}
+                  data-aos="fade-up"
+                  data-aos-delay="400"
+                >
+                  {isLoading ? 'Redirecting to payment...' : 'Donate Now'}
+                </button>
 
                 <p className="secure-note mt32" data-aos="fade-up" data-aos-delay="500">
                   Secure payment powered by Stripe.
@@ -185,7 +199,7 @@ const Donate = () => {
       </div>
 
       <style>{`
-        /* Hero Section - Matching Contact/FAQs Style */
+        /* Hero Section */
         .donate-hero-content {
           display: flex;
           flex-direction: column;
@@ -231,43 +245,105 @@ const Donate = () => {
           text-transform: uppercase;
         }
         
-        .section-logo {
-          max-width: 60px;
-          margin-bottom: 16px;
-          filter: brightness(0) invert(1);
-          opacity: 0.9;
+        /* Amount Selection */
+        .amount-selection {
+          margin-bottom: 32px;
         }
         
-        /* Donation Amount Display */
-        .donation-amount-display {
+        .preset-amounts {
           display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 8px;
+          justify-content: center;
+          gap: 16px;
+          margin-bottom: 24px;
+          flex-wrap: wrap;
         }
         
-        .amount-label {
-          font-size: 11px;
-          text-transform: uppercase;
-          letter-spacing: 3px;
-          color: rgba(255, 255, 255, 0.6);
-          background: rgba(0, 0, 0, 0.15);
-          padding: 6px 16px;
-          border-radius: 4px;
+        .amount-btn {
+          background: rgba(255, 255, 255, 0.1);
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          color: #fff;
+          padding: 16px 32px;
+          font-size: 24px;
+          font-weight: 700;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          min-width: 100px;
+        }
+        
+        .amount-btn:hover {
+          background: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.5);
+          transform: translateY(-2px);
+        }
+        
+        .amount-btn.selected {
+          background: #fff;
+          color: #47b475;
+          border-color: #fff;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .amount-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        .custom-amount-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          max-width: 280px;
+          margin: 0 auto;
+        }
+        
+        .currency-symbol {
+          font-size: 28px;
+          font-weight: 700;
+          color: #fff;
+        }
+        
+        .custom-amount-input {
+          background: rgba(255, 255, 255, 0.1);
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          color: #fff;
+          padding: 16px 20px;
+          font-size: 20px;
+          font-weight: 600;
+          border-radius: 12px;
+          width: 100%;
+          text-align: center;
+          outline: none;
+          transition: all 0.3s ease;
+        }
+        
+        .custom-amount-input::placeholder {
+          color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .custom-amount-input:focus {
+          border-color: #fff;
+          background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .custom-amount-input:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+        
+        /* Selected Amount Display */
+        .selected-amount-display {
+          margin-bottom: 24px;
         }
         
         .amount-value {
-          font-size: 80px;
+          font-size: 64px;
           font-weight: 700;
           color: #fff;
           line-height: 1;
-        }
-        
-        .amount-type {
-          font-size: 14px;
-          color: rgba(255, 255, 255, 0.7);
-          text-transform: uppercase;
-          letter-spacing: 2px;
         }
         
         /* Donate Button */
@@ -342,192 +418,40 @@ const Donate = () => {
           color: rgba(255, 255, 255, 0.5);
         }
         
-        /* Payment Form */
-        .payment-form-wrapper {
-          max-width: 400px;
-          margin: 0 auto;
-        }
-        
-        .donation-form {
-          background: #fff;
-          padding: 32px;
-          border-radius: 12px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-        
-        .payment-element-container {
-          margin-bottom: 24px;
-          min-height: 200px;
-        }
-        
-        .loading-text {
-          text-align: center;
-          color: #666;
-          font-size: 14px;
-          margin-bottom: 16px;
-        }
-        
-        .donation-form .donate-btn {
-          width: 100%;
-          margin-top: 8px;
-        }
-        
-        .btn-cancel {
-          background: transparent;
-          border: none;
-          color: rgba(255, 255, 255, 0.7);
-          font-size: 14px;
-          cursor: pointer;
-          text-decoration: underline;
-          padding: 8px 16px;
-        }
-        
-        .btn-cancel:hover {
-          color: #fff;
-        }
-        
-        .mt24 {
-          margin-top: 24px;
-        }
-        
-        /* Impact Cards */
-        .mt64 {
-          margin-top: 64px;
-        }
-        
-        .impact-card {
-          padding: 48px 24px;
-          background: rgba(0, 0, 0, 0.4);
-          border-radius: 8px;
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          transition: all 0.3s ease;
-        }
-        
-        .impact-card:hover {
-          background: rgba(0, 0, 0, 0.5);
-          transform: translateY(-8px);
-          border-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        .impact-amount {
-          display: block;
-          font-size: 52px;
-          font-weight: 700;
-          color: #fff;
-          margin-bottom: 16px;
-          line-height: 1;
-          font-style: italic;
-        }
-        
-        .impact-desc {
-          font-size: 15px;
-          color: rgba(255, 255, 255, 0.85);
-          margin: 0;
-          line-height: 1.5;
-        }
-        
-        /* Follow Us Section */
-        .follow-link {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 16px;
-          text-decoration: none;
-          transition: all 0.3s ease;
-        }
-        
-        .follow-link:hover {
-          transform: scale(1.05);
-        }
-        
-        .follow-logo {
-          height: 40px;
-        }
-        
-        .follow-plus {
-          font-size: 28px;
-          color: rgba(255, 255, 255, 0.8);
-          font-weight: 300;
-        }
-        
-        .follow-insta {
-          height: 44px;
-          filter: brightness(0) invert(1);
+        .mt32 {
+          margin-top: 32px;
         }
         
         /* Responsive */
         @media (max-width: 991px) {
-          .hero-support-text {
-            font-size: 20px;
-            letter-spacing: 10px;
-          }
-          
-          .hero-logo-main {
-            height: 80px;
-            max-width: 260px;
-          }
-          
-          .one-ball-world {
-            font-size: 16px;
-            letter-spacing: 3px;
-          }
-          
           .section-heading {
             font-size: 32px;
             letter-spacing: 4px;
           }
+          
+          .amount-value {
+            font-size: 48px;
+          }
         }
         
         @media (max-width: 767px) {
-          .hero-support-text {
-            font-size: 16px;
-            letter-spacing: 8px;
-            margin-bottom: 16px;
+          .preset-amounts {
+            gap: 12px;
           }
           
-          .hero-logo-main {
-            height: 60px;
-            max-width: 200px;
-          }
-          
-          .hero-logo-container {
-            margin-bottom: 20px;
-          }
-          
-          .hero-subheading {
-            gap: 10px;
-            margin-bottom: 16px;
-          }
-          
-          .one-ball-world {
-            font-size: 13px;
-            letter-spacing: 2px;
-          }
-          
-          .hero-tagline-text {
-            font-size: 14px;
-          }
-          
-          .section-heading {
-            font-size: 26px;
-            letter-spacing: 3px;
+          .amount-btn {
+            padding: 14px 24px;
+            font-size: 20px;
+            min-width: 80px;
           }
           
           .amount-value {
-            font-size: 56px;
-          }
-          
-          .impact-amount {
             font-size: 40px;
           }
           
-          .donation-form {
-            padding: 24px;
-          }
-          
-          .payment-form-wrapper {
-            padding: 0 16px;
+          .section-heading {
+            font-size: 24px;
+            letter-spacing: 3px;
           }
         }
       `}</style>
