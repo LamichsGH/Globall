@@ -110,9 +110,9 @@ const Home = () => {
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '16px' }}
                   >
                     <img 
-                      src="/globall-nav-logo.png" 
+                      src="/index.png" 
                       alt="GLO-BALL" 
-                      style={{ height: '40px', filter: 'brightness(0) invert(1)' }} 
+                      style={{ height: '40px' }} 
                     />
                     <span style={{ fontSize: '28px', color: 'rgba(255,255,255,0.8)', fontWeight: '300' }}>+</span>
                     <img 

@@ -9,11 +9,8 @@ const Footer = () => {
             <Link to="/" style={{ display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
               <img 
                 alt="GLO-BALL" 
-                src="/globall-nav-logo.png" 
-                style={{ 
-                  height: '40px',
-                  filter: 'brightness(0) invert(1)'
-                }} 
+                src="/index.png" 
+                style={{ height: '40px' }} 
               />
             </Link>
           </div>
