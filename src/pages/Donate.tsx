@@ -56,13 +56,20 @@ const Donate = () => {
           <div className="container v-align-transform">
             <div className="row">
               <div className="col-sm-12 text-center" data-aos="fade-up">
-                <h1 className="large bold uppercase mb16" data-aos="fade-up" data-aos-delay="100">
-                  Support GLO-BALL
+                <img 
+                  alt="GLO-BALL" 
+                  src="/globall-logo.png" 
+                  className="hero-logo"
+                  data-aos="fade-up" 
+                  data-aos-delay="100"
+                />
+                <h1 className="hero-main-title" data-aos="fade-up" data-aos-delay="200">
+                  SUPPORT GLO-BALL
                 </h1>
-                <div className="hero-subheading" data-aos="fade-up" data-aos-delay="200">
+                <div className="hero-subheading" data-aos="fade-up" data-aos-delay="300">
                   <span className="one-ball-world">One Ball</span> <span className="hero-separator">|</span> <span className="one-ball-world">One World</span>
                 </div>
-                <h5 className="hero-tagline" data-aos="fade-up" data-aos-delay="300">
+                <h5 className="hero-tagline" data-aos="fade-up" data-aos-delay="400">
                   Help us bring joy through football
                 </h5>
               </div>
@@ -75,8 +82,8 @@ const Donate = () => {
           <div className="container">
             <div className="row">
               <div className="col-sm-10 col-sm-offset-1 text-center">
-                <h2 className="large bold uppercase mb40 mb-xs-24" data-aos="fade-up" data-aos-delay="100">
-                  Make a Donation
+                <h2 className="section-heading" data-aos="fade-up" data-aos-delay="100">
+                  MAKE A DONATION
                 </h2>
                 <p className="lead mb48 mb-xs-32" data-aos="fade-up" data-aos-delay="200">
                   Your donation helps us provide footballs and equipment to children in underserved communities around the world.
@@ -99,7 +106,7 @@ const Donate = () => {
                 </div>
 
                 {donationType === 'monthly' && (
-                  <p className="monthly-note mb32" data-aos="fade-in">
+                  <p className="monthly-note mb24" data-aos="fade-in">
                     ★ Monthly donors help us plan for the future
                   </p>
                 )}
@@ -138,12 +145,19 @@ const Donate = () => {
           <div className="container">
             <div className="row">
               <div className="col-sm-12 text-center">
-                <h2 className="large bold uppercase mb64 mb-xs-32" data-aos="fade-up" data-aos-delay="100">
-                  Your Impact
+                <img 
+                  alt="GLO-BALL" 
+                  src="/globall-logo.png" 
+                  className="section-logo"
+                  data-aos="fade-up" 
+                  data-aos-delay="50"
+                />
+                <h2 className="section-heading" data-aos="fade-up" data-aos-delay="100">
+                  YOUR IMPACT
                 </h2>
               </div>
             </div>
-            <div className="row">
+            <div className="row mt64">
               <div className="col-sm-4 text-center mb-xs-32" data-aos="fade-up" data-aos-delay="200">
                 <div className="impact-card">
                   <span className="impact-amount">£10</span>
@@ -173,10 +187,21 @@ const Donate = () => {
           </div>
           <div className="container">
             <div className="row">
-              <div className="col-sm-12 col-md-10 col-md-offset-1 text-center">
-                <h1 className="large bold uppercase mb40 mb-xs-16" data-aos="fade-up" data-aos-delay="100">Follow Us</h1>
-                <a href="https://www.instagram.com/globalluk/" target="_blank" rel="noopener noreferrer" data-aos="fade-up" data-aos-delay="200">
-                  <img className="image-xs" alt="Instagram" src="/insta.png" />
+              <div className="col-sm-12 text-center">
+                <h2 className="section-heading mb48" data-aos="fade-up" data-aos-delay="100">
+                  FOLLOW US
+                </h2>
+                <a 
+                  href="https://www.instagram.com/globalluk/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="follow-link"
+                  data-aos="fade-up" 
+                  data-aos-delay="200"
+                >
+                  <img src="/globall-nav-logo.png" alt="GLO-BALL" className="follow-logo" />
+                  <span className="follow-plus">+</span>
+                  <img src="/insta.png" alt="Instagram" className="follow-insta" />
                 </a>
               </div>
             </div>
@@ -187,24 +212,57 @@ const Donate = () => {
       </div>
 
       <style>{`
+        /* Hero Logo */
+        .hero-logo {
+          max-width: 120px;
+          margin-bottom: 24px;
+          filter: brightness(0) invert(1);
+        }
+        
+        .hero-main-title {
+          font-size: 56px;
+          font-weight: 700;
+          letter-spacing: 8px;
+          color: #fff;
+          margin-bottom: 16px;
+          text-transform: uppercase;
+        }
+        
+        /* Section Headings */
+        .section-heading {
+          font-size: 42px;
+          font-weight: 700;
+          letter-spacing: 6px;
+          color: #fff;
+          margin-bottom: 32px;
+          text-transform: uppercase;
+        }
+        
+        .section-logo {
+          max-width: 60px;
+          margin-bottom: 16px;
+          filter: brightness(0) invert(1);
+          opacity: 0.9;
+        }
+        
         /* Donation Toggle */
         .donation-toggle {
           display: inline-flex;
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.15);
           border-radius: 50px;
           padding: 6px;
-          gap: 4px;
+          gap: 0;
         }
         
         .donate-type-btn {
-          padding: 14px 32px;
+          padding: 16px 40px;
           border: none;
           background: transparent;
           color: rgba(255, 255, 255, 0.8);
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 1px;
+          letter-spacing: 2px;
           cursor: pointer;
           border-radius: 50px;
           transition: all 0.3s ease;
@@ -212,7 +270,6 @@ const Donate = () => {
         
         .donate-type-btn:hover {
           color: #fff;
-          background: rgba(255, 255, 255, 0.1);
         }
         
         .donate-type-btn.active {
@@ -235,27 +292,27 @@ const Donate = () => {
         }
         
         .amount-label {
-          font-size: 12px;
+          font-size: 11px;
           text-transform: uppercase;
-          letter-spacing: 2px;
-          color: rgba(255, 255, 255, 0.7);
-          background: rgba(0, 0, 0, 0.2);
-          padding: 4px 12px;
+          letter-spacing: 3px;
+          color: rgba(255, 255, 255, 0.6);
+          background: rgba(0, 0, 0, 0.15);
+          padding: 6px 16px;
           border-radius: 4px;
         }
         
         .amount-value {
-          font-size: 72px;
+          font-size: 80px;
           font-weight: 700;
           color: #fff;
           line-height: 1;
         }
         
         .amount-type {
-          font-size: 16px;
-          color: rgba(255, 255, 255, 0.8);
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.7);
           text-transform: uppercase;
-          letter-spacing: 1px;
+          letter-spacing: 2px;
         }
         
         /* Donate Button */
@@ -263,19 +320,19 @@ const Donate = () => {
           background: #fff !important;
           color: #47b475 !important;
           border: none !important;
-          padding: 18px 48px !important;
-          font-size: 16px !important;
+          padding: 20px 56px !important;
+          font-size: 15px !important;
           font-weight: 700 !important;
           text-transform: uppercase !important;
-          letter-spacing: 2px !important;
+          letter-spacing: 3px !important;
           border-radius: 50px !important;
           transition: all 0.3s ease !important;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
         
         .donate-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+          transform: translateY(-3px);
+          box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
           background: #fff !important;
           color: #3a9660 !important;
         }
@@ -288,13 +345,17 @@ const Donate = () => {
         
         .secure-note {
           font-size: 13px;
-          color: rgba(255, 255, 255, 0.6);
+          color: rgba(255, 255, 255, 0.5);
         }
         
         /* Impact Cards */
+        .mt64 {
+          margin-top: 64px;
+        }
+        
         .impact-card {
-          padding: 40px 20px;
-          background: rgba(0, 0, 0, 0.3);
+          padding: 48px 24px;
+          background: rgba(0, 0, 0, 0.4);
           border-radius: 8px;
           backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.1);
@@ -302,49 +363,120 @@ const Donate = () => {
         }
         
         .impact-card:hover {
-          background: rgba(0, 0, 0, 0.4);
-          transform: translateY(-5px);
+          background: rgba(0, 0, 0, 0.5);
+          transform: translateY(-8px);
           border-color: rgba(255, 255, 255, 0.2);
         }
         
         .impact-amount {
           display: block;
-          font-size: 48px;
+          font-size: 52px;
           font-weight: 700;
-          color: #8ed3ab;
+          color: #fff;
           margin-bottom: 16px;
           line-height: 1;
+          font-style: italic;
         }
         
         .impact-desc {
-          font-size: 16px;
-          color: rgba(255, 255, 255, 0.9);
+          font-size: 15px;
+          color: rgba(255, 255, 255, 0.85);
           margin: 0;
           line-height: 1.5;
         }
         
+        /* Follow Us Section */
+        .follow-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+        
+        .follow-link:hover {
+          transform: scale(1.05);
+        }
+        
+        .follow-logo {
+          height: 40px;
+          filter: brightness(0) invert(1);
+        }
+        
+        .follow-plus {
+          font-size: 28px;
+          color: rgba(255, 255, 255, 0.8);
+          font-weight: 300;
+        }
+        
+        .follow-insta {
+          height: 44px;
+          filter: brightness(0) invert(1);
+        }
+        
         /* Responsive */
+        @media (max-width: 991px) {
+          .hero-main-title {
+            font-size: 42px;
+            letter-spacing: 5px;
+          }
+          
+          .section-heading {
+            font-size: 32px;
+            letter-spacing: 4px;
+          }
+        }
+        
         @media (max-width: 767px) {
+          .hero-logo {
+            max-width: 80px;
+          }
+          
+          .hero-main-title {
+            font-size: 28px;
+            letter-spacing: 3px;
+          }
+          
+          .section-heading {
+            font-size: 24px;
+            letter-spacing: 3px;
+          }
+          
           .donate-type-btn {
-            padding: 12px 24px;
+            padding: 12px 28px;
             font-size: 12px;
+            letter-spacing: 1px;
           }
           
           .amount-value {
-            font-size: 56px;
+            font-size: 60px;
           }
           
           .donate-btn {
-            padding: 16px 36px !important;
-            font-size: 14px !important;
+            padding: 16px 40px !important;
+            font-size: 13px !important;
+            letter-spacing: 2px !important;
           }
           
           .impact-amount {
-            font-size: 36px;
+            font-size: 40px;
           }
           
           .impact-card {
-            padding: 30px 15px;
+            padding: 32px 20px;
+          }
+          
+          .mt64 {
+            margin-top: 40px;
+          }
+          
+          .follow-logo {
+            height: 32px;
+          }
+          
+          .follow-insta {
+            height: 36px;
           }
         }
       `}</style>

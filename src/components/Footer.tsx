@@ -5,12 +5,20 @@ const Footer = () => {
     <footer className="footer-2 bg-primary text-center-xs">
       <div className="container">
         <div className="row">
-          <div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 text-center">
-            <Link to="/">
-              <img className="image-xs" alt="Globall" src="/index.png" />
+          <div className="col-sm-12 text-center" style={{ marginBottom: '16px' }}>
+            <Link to="/" style={{ display: 'inline-block' }}>
+              <img 
+                alt="GLO-BALL" 
+                src="/globall-logo.png" 
+                style={{ 
+                  height: '50px', 
+                  filter: 'brightness(0) invert(1)',
+                  margin: '0 auto'
+                }} 
+              />
             </Link>
           </div>
-          <div className="col-sm-12 col-md-8 col-md-offset-2 text-center">
+          <div className="col-sm-12 text-center">
             <ul className="list-inline social-list mb0">
               <Link to="/terms">SITE TERMS</Link> | <Link to="/privacy">PRIVACY</Link>
             </ul>
